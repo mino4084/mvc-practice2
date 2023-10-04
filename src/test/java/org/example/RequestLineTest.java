@@ -11,5 +11,6 @@ public class RequestLineTest {
         RequestLine requestLine =
                 new RequestLine("GET /calculate?operand1=1&operator+=&operand2=23 HTTP/1.1");
         assertThat(requestLine).isNotNull();
+        assertThat(requestLine).isEqualTo(new RequestLine("GET", "/calculate","operand1=1&operator+=&operand2=23"));
     }
 }
