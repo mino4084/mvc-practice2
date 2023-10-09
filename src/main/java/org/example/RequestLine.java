@@ -3,10 +3,22 @@ package org.example;
 import java.util.Objects;
 
 public class RequestLine {
-    private final String method; //GET
-    private final String urlPath; // /calculate?operand1=1&operator+=&operand2=23
 
-    private String queryString;
+    /**
+     * RequestLine
+     *  - HttpMethod
+     *  - path
+     *  - queryString
+     * Header
+     * Body
+     *
+     */
+    private final String method; //GET
+    private final String urlPath; // /calculate
+
+    private QueryStrings queryString;
+    // operand1=1&operator+=&operand2=23
+    // -> 키 밸류 분리 필요
 
     /**
      *
@@ -16,7 +28,7 @@ public class RequestLine {
     public RequestLine(String method, String urlPath, String queryString) {
         this.method = method;
         this.urlPath = urlPath;
-        this.queryString = queryString;
+        this.queryString = new QueryStrings(queryString);
     }
 
     public RequestLine(String requestLine) {
@@ -26,7 +38,7 @@ public class RequestLine {
         this.urlPath = urlPathTokens[0];
 
         if (urlPathTokens.length == 2) {
-            this.queryString = urlPathTokens[1];
+            this.queryString = new QueryStrings(urlPathTokens[1]);
         }
     }
 
@@ -41,5 +53,17 @@ public class RequestLine {
     @Override
     public int hashCode() {
         return Objects.hash(method, urlPath, queryString);
+    }
+
+    public boolean isGetRequest() {
+        return "GET".equals(this.method);
+    }
+
+    public boolean matchPath(String path) {
+        return urlPath.equals(path);
+    }
+
+    public QueryStrings getQueryStrings() {
+        return this.queryString;
     }
 }
